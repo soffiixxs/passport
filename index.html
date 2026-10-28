@@ -2,58 +2,65 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#94B3D1">
-<title>Профиль — Эльвиора Рэйн</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#6D8DA8">
+<title>Паспорт — Рэйн Эльвиора</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@500;600;700&display=swap');
 
   :root{
-    --bg-page:#7E9FB9;
+    --bg-page:#6D8DA8;
     --bg-card:#94B3D1;
     --text-main:#052552;
     --text-accent:#0B3B75;
-    --text-muted:#224B75;
+    --text-muted:#335C85;
     --gold:#C5A880;
   }
 
   *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
 
-  html,body{ height:100%; }
+  html, body {
+    height: 100%;
+    /* Предотвращаем "прыжки" страницы на iOS */
+    overflow: hidden; 
+  }
 
   body{
     font-family:'Montserrat', sans-serif;
     background-color:var(--bg-page);
     background-image:linear-gradient(135deg, #6D8DA8, #8EA9C4);
     color:var(--text-main);
-    min-height:100dvh;
     display:flex;
     justify-content:center;
     align-items:center;
-    padding:16px;
-    padding-top:max(16px, env(safe-area-inset-top));
-    padding-bottom:max(16px, env(safe-area-inset-bottom));
+    /* Безопасные отступы для шторок браузера */
+    padding: 12px;
+    padding-top: max(16px, env(safe-area-inset-top));
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
   }
 
   .passport-card{
     position:relative;
     width:100%;
-    max-width:480px;
+    max-width:380px;
+    /* Карточка тянется по высоте, если есть место */
+    height: 100%;
+    max-height: 800px; 
     background-color:var(--bg-card);
-    border-radius:24px;
+    border-radius:20px;
     overflow:hidden;
-    box-shadow:0 15px 35px rgba(5,37,82,0.25), inset 0 0 0 1px rgba(255,255,255,0.3);
-    animation:fadeUp .6s ease both;
+    box-shadow:0 10px 25px rgba(5,37,82,0.3), inset 0 0 0 1px rgba(255,255,255,0.4);
     display:flex;
     flex-direction:column;
+    animation:fadeUp .5s ease both;
   }
 
   @keyframes fadeUp{
-    from{opacity:0; transform:translateY(20px);}
+    from{opacity:0; transform:translateY(10px);}
     to{opacity:1; transform:translateY(0);}
   }
 
-  /* ==== Фоновая графика (лого как водяной знак) ==== */
+  /* Водяной знак */
   .bg-watermark{
     position:absolute;
     inset:0;
@@ -68,30 +75,36 @@
   .bg-watermark::before{
     content:"";
     position:absolute;
-    width:110%;
-    height:110%;
+    width:100%;
+    height:100%;
     background-image:url('image/лого.png');
     background-size:contain;
     background-position:center;
     background-repeat:no-repeat;
-    opacity:0.08;
-    filter:blur(0.5px);
+    opacity:0.05;
   }
 
-  /* ==== Шапка ==== */
+  /* Шапка (фиксированная высота) */
   .header{
     position:relative;
     z-index:1;
-    padding:24px 20px 10px;
+    padding:16px 16px 8px;
     display:flex;
     align-items:center;
-    gap:16px;
+    justify-content:space-between;
+    gap:10px;
+    flex-shrink: 0; /* Не сжимать */
   }
 
-  /* Лого в шапке */
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
   .emblem{
-    width:64px;
-    height:64px;
+    width:44px;
+    height:44px;
     flex-shrink:0;
     background-image:url('image/лого.png');
     background-size:contain;
@@ -102,51 +115,57 @@
   .header-titles{
     display:flex;
     flex-direction:column;
-    flex-grow:1;
   }
 
   .country-name{
     font-family:'Merriweather', serif;
-    font-size:1.5rem;
-    font-weight:400;
+    font-size:1.15rem;
+    font-weight:700;
     color:var(--text-accent);
-    letter-spacing:1px;
+    letter-spacing:0.5px;
     text-transform:uppercase;
-    line-height:1.1;
+    line-height:1;
   }
 
   .doc-type{
-    font-size:0.7rem;
+    font-size:0.6rem;
     font-weight:600;
     color:var(--text-muted);
-    letter-spacing:1px;
+    letter-spacing:0.5px;
     text-transform:lowercase;
-    margin-top:4px;
+    margin-top:3px;
   }
 
-  /* Звёзды в шапке справа */
   .stars{
-    width:70px;
-    height:70px;
+    width:36px;
+    height:36px;
     flex-shrink:0;
     background-image:url('image/звёзды.png');
     background-size:contain;
     background-repeat:no-repeat;
     background-position:center;
-    filter:drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    filter:drop-shadow(0 1px 2px rgba(0,0,0,0.2));
   }
 
-  /* ==== Фото ==== */
+  /* Центральный блок (Фото + Имя) */
+  .hero-section {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 4px 16px 12px;
+  }
+
   .photo-wrap{
-    position:relative;
-    z-index:1;
-    width:132px;
-    height:132px;
-    margin:10px auto 12px;
+    width:96px;
+    height:96px;
     border-radius:50%;
-    padding:4px;
+    padding:3px;
     background:conic-gradient(from 180deg, var(--text-muted), var(--gold), var(--text-muted));
-    box-shadow:0 8px 24px rgba(5,37,82,.3);
+    box-shadow:0 4px 10px rgba(5,37,82,.25);
+    margin-bottom: 8px;
   }
 
   .photo-wrap img{
@@ -155,89 +174,88 @@
     border-radius:50%;
     display:block;
     background:var(--text-main);
-    border:3px solid var(--bg-card);
+    border:2px solid var(--bg-card);
   }
 
   .photo-fallback{
     width:100%; height:100%;
     border-radius:50%;
-    border:3px solid var(--bg-card);
+    border:2px solid var(--bg-card);
     background:linear-gradient(145deg,var(--text-accent),var(--text-main));
     display:flex; align-items:center; justify-content:center;
-    font-size:44px; font-weight:700; color:#E9F2FF;
-    letter-spacing:1px;
-  }
-
-  /* ==== Имя и статус ==== */
-  .identity{
-    position:relative;
-    z-index:1;
-    text-align:center;
-    padding:0 20px 10px;
+    font-size:32px; font-weight:700; color:#E9F2FF;
   }
 
   .name{
     font-family:'Merriweather', serif;
-    font-size:1.4rem;
+    font-size:1.15rem;
     font-weight:700;
     color:var(--text-accent);
     line-height:1.2;
+    text-align: center;
+    margin-bottom: 6px;
   }
 
   .status{
     display:inline-flex;
     align-items:center;
-    gap:6px;
-    margin-top:10px;
-    padding:4px 12px;
-    font-size:.7rem;
-    font-weight:600;
-    letter-spacing:.5px;
+    gap:5px;
+    padding:3px 10px;
+    font-size:.6rem;
+    font-weight:700;
+    letter-spacing:0.5px;
     text-transform:uppercase;
     color:var(--text-main);
     background:rgba(5,37,82,.08);
-    border:1px solid rgba(5,37,82,.25);
+    border:1px solid rgba(5,37,82,.2);
     border-radius:100px;
   }
 
   .dot{
-    width:7px; height:7px; border-radius:50%;
+    width:5px; height:5px; border-radius:50%;
     background:#2e9e5b;
-    box-shadow:0 0 8px #2e9e5b;
-    animation:pulse 2s infinite;
+    box-shadow:0 0 5px #2e9e5b;
   }
-  @keyframes pulse{ 50%{opacity:.4;} }
 
-  /* ==== Данные ==== */
+  /* Блок с данными (растягивается) */
   .info{
     position:relative;
     z-index:1;
-    padding:14px 20px 6px;
+    padding:0 16px;
+    flex-grow: 1; /* Занимает оставшееся место */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly; /* Равномерно распределяет данные по высоте */
+  }
+
+  .info-group {
+    display: flex;
+    flex-direction: column;
   }
 
   .info-title{
-    font-size:.7rem;
+    font-size:.65rem;
     font-weight:700;
-    letter-spacing:1.5px;
+    letter-spacing:1px;
     text-transform:uppercase;
     color:var(--text-muted);
-    margin:14px 0 4px;
+    margin: 8px 0 2px;
   }
 
   .row{
     display:flex;
     justify-content:space-between;
-    align-items:baseline;
-    gap:12px;
-    padding:10px 0;
+    align-items:baseline; /* Выравнивание по базовой линии текста */
+    gap:8px;
+    padding:6px 0;
     border-bottom:1px dashed rgba(5,37,82,.15);
-    font-size:.9rem;
   }
+
   .row:last-child{ border-bottom:none; }
 
   .row .label{
     color:var(--text-muted);
-    font-size:.75rem;
+    font-size:.7rem;
     flex:0 0 auto;
     font-weight:600;
   }
@@ -246,43 +264,41 @@
     color:var(--text-accent);
     font-weight:600;
     text-align:right;
-    word-break:break-word;
+    font-size:.8rem;
     font-family:'Merriweather', serif;
   }
 
+  /* Моноширинный шрифт для цифр и ID, чтобы они ровно стояли */
   .value.mono{
     font-family:'Montserrat', sans-serif;
-    letter-spacing:1px;
+    letter-spacing:0.5px;
     font-weight:700;
+    font-size:.75rem;
   }
 
-  /* ==== Подвал ==== */
+  /* Подвал (фиксированная высота) */
   .footer{
     position:relative;
     z-index:1;
-    margin-top:8px;
-    padding:16px 20px;
+    padding:12px 16px;
     text-align:center;
     font-family:'Merriweather', serif;
-    font-size:.75rem;
+    font-size:.65rem;
     color:var(--text-muted);
-    line-height:1.4;
+    line-height:1.3;
     border-top:1px solid rgba(5,37,82,.1);
+    flex-shrink: 0; /* Не сжимать */
+    background: rgba(148, 179, 209, 0.9); /* Легкий фон, чтобы текст не сливался с водяным знаком */
   }
 
   .footer span{
     display:block;
     text-transform:uppercase;
     font-family:'Montserrat', sans-serif;
-    font-weight:600;
-    letter-spacing:.5px;
-    font-size:.7rem;
+    font-weight:700;
+    letter-spacing:0.5px;
+    font-size:.6rem;
     margin-bottom:2px;
-  }
-
-  @media (min-width:600px){
-    .name{ font-size:1.6rem; }
-    .row{ font-size:1rem; padding:12px 0; }
   }
 </style>
 </head>
@@ -290,57 +306,58 @@
 
   <main class="passport-card">
 
-    <!-- Фоновый водяной знак -->
     <div class="bg-watermark"></div>
 
-    <!-- Шапка -->
     <header class="header">
-      <div class="emblem"></div>
-      <div class="header-titles">
-        <h1 class="country-name">Эвдемония</h1>
-        <div class="doc-type">паспорт гражданина</div>
+      <div class="header-left">
+        <div class="emblem"></div>
+        <div class="header-titles">
+          <h1 class="country-name">Эвдемония</h1>
+          <div class="doc-type">паспорт гражданина</div>
+        </div>
       </div>
       <div class="stars"></div>
     </header>
 
-    <!-- Фото -->
-    <div class="photo-wrap">
-      <img src="image/ava.png"
-           alt="Фото профиля"
-           onerror="this.outerHTML='<div class=\'photo-fallback\'>АК</div>'">
-    </div>
-
-    <!-- Имя -->
-    <div class="identity">
+    <div class="hero-section">
+      <div class="photo-wrap">
+        <img src="image/ava.png"
+             alt="Фото профиля"
+             onerror="this.outerHTML='<div class=\'photo-fallback\'>РЭ</div>'">
+      </div>
       <h1 class="name">Рэйн Эльвиора Астеровна</h1>
       <span class="status"><span class="dot"></span> Активен</span>
     </div>
 
-    <!-- Данные -->
     <section class="info">
 
-      <h2 class="info-title">Личные данные</h2>
-      <div class="row"><span class="label">Дата рождения</span><span class="value">15.05.2347</span></div>
-      <div class="row"><span class="label">Пол</span><span class="value">Женский</span></div>
-      <div class="row"><span class="label">Гражданство</span><span class="value">Эвдемония</span></div>
-      <div class="row"><span class="label">Остров</span><span class="value">Текна</span></div>
+      <div class="info-group">
+        <h2 class="info-title">Личные данные</h2>
+        <div class="row"><span class="label">Дата рождения</span><span class="value">15.05.2347</span></div>
+        <div class="row"><span class="label">Пол</span><span class="value">Женский</span></div>
+        <div class="row"><span class="label">Гражданство</span><span class="value">Эвдемония</span></div>
+        <div class="row"><span class="label">Остров</span><span class="value">Текна</span></div>
+      </div>
 
-      <h2 class="info-title">Документ</h2>
-      <div class="row"><span class="label">Серия и номер</span><span class="value mono">29 36 584</span></div>
-      <div class="row"><span class="label">Кем выдан</span><span class="value">СТХ Эвдемонии</span></div>
-      <div class="row"><span class="label">Дата выдачи</span><span class="value">15.05.2357</span></div>
-      <div class="row"><span class="label">Код подразделения</span><span class="value mono">БиК</span></div>
+      <div class="info-group">
+        <h2 class="info-title">Документ</h2>
+        <div class="row"><span class="label">Серия и номер</span><span class="value mono">29 36 584</span></div>
+        <div class="row"><span class="label">Кем выдан</span><span class="value">СТХ Эвдемонии</span></div>
+        <div class="row"><span class="label">Дата выдачи</span><span class="value">15.05.2357</span></div>
+        <div class="row"><span class="label">Код подразделения</span><span class="value mono">БиК</span></div>
+      </div>
 
-      <h2 class="info-title">Контакты</h2>
-      <div class="row"><span class="label">Эвдафон</span><span class="value">+7 T73-РЭК</span></div>
-      <div class="row"><span class="label">Email</span><span class="value">e.rain@mail.evd</span></div>
-      <div class="row"><span class="label">ID</span><span class="value mono">EVD-679327</span></div>
+      <div class="info-group">
+        <h2 class="info-title">Контакты</h2>
+        <div class="row"><span class="label">Эдафон</span><span class="value">+7 Т73-РЭК</span></div>
+        <div class="row"><span class="label">Email</span><span class="value">e.rain@mail.evd</span></div>
+        <div class="row"><span class="label">ID</span><span class="value mono">EVD-679327</span></div>
+      </div>
 
     </section>
 
-    <!-- Подвал -->
     <footer class="footer">
-      <span>Эвдемония —</span>
+      <span>Эвдемония</span>
       страна, где люди счастливы
     </footer>
 
